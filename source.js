@@ -1,58 +1,64 @@
-console.log("I am on");
-let feed = document.querySelector(".feed-area");
+console.log("JS LOADED");
 
-const url =
-  "https://newsapi.org/v2/everything?q=apple&from=2025-12-09&to=2025-12-09&sortBy=popularity&apiKey=dc397683b8884a17958b72cdf012d1f5";
+const feed = document.querySelector(".feed-area");
+const nextBtn = document.querySelector(".next");
+const prevBtn = document.querySelector(".prev");
+
+let currentPage = 1;
+const itemsPerPage = 6;
+let articles = [];
+
+// ✅ Public API (NO KEY, NO CORS issues)
+const url = "https://api.spaceflightnewsapi.net/v4/articles/";
 
 fetch(url)
   .then((response) => response.json())
   .then((data) => {
-    console.log(data.articles);
-    let currentPage = 1;
-    let itemPerPage = 6;
-    function showData() {
-      const output = document.querySelector(".feed-area");
-      output.innerHTML = "";
-
-      const start = (currentPage - 1) * itemPerPage;
-      const end = start + itemPerPage;
-      const pageData = data.articles.slice(start, end);
-
-      pageData.forEach((element) => {
-        output.innerHTML += `
-          <div class="feed">
-            <img
-              id="newsImg"
-              src="${element.urlToImage}"
-              alt="Picture related to event"
-            />
-            <div class="feed-description">
-              <h4>${element.title}</h4>
-              <p>
-              ${element.description}
-              </p>
-              <a href="${element.url}" target="_blank"><button>Read More</button></a>
-            </div>
-          </div>
-          `;
-      });
-    }
+    articles = data.results;
     showData();
-
-    document.querySelector(".next").onclick = () => {
-      if (currentPage * itemPerPage < data.articles.length) {
-        currentPage++;
-        showData();
-      }
-    };
-
-    document.querySelector(".prev").onclick = () => {
-      if (currentPage > 1) {
-        currentPage--;
-        showData();
-      }
-    };
   })
   .catch((error) => {
-    console.log(error);
+    console.error("Fetch error:", error);
+    feed.innerHTML = "<p>Failed to load news.</p>";
   });
+
+function showData() {
+  feed.innerHTML = "";
+
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const pageData = articles.slice(start, end);
+
+  pageData.forEach((item) => {
+    feed.innerHTML += `
+      <div class="feed">
+        <img
+          src="${item.image_url || ""}"
+          alt="News image"
+        />
+        <div class="feed-description">
+          <h4>${item.title}</h4>
+          <p>${item.summary}</p>
+          <a href="${item.url}" target="_blank">
+            <button>Read More</button>
+          </a>
+        </div>
+      </div>
+    `;
+  });
+}
+
+// Pagination
+nextBtn.addEventListener("click", () => {
+  if (currentPage * itemsPerPage < articles.length) {
+    currentPage++;
+    showData();
+  }
+});
+
+prevBtn.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    showData();
+  }
+});
