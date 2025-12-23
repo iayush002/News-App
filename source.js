@@ -8,7 +8,6 @@ let currentPage = 1;
 const itemsPerPage = 6;
 let articles = [];
 
-// ✅ Public API (NO KEY, NO CORS issues)
 const url = "https://api.spaceflightnewsapi.net/v4/articles/";
 
 fetch(url)
@@ -48,7 +47,6 @@ function showData() {
   });
 }
 
-// Pagination
 nextBtn.addEventListener("click", () => {
   if (currentPage * itemsPerPage < articles.length) {
     currentPage++;
