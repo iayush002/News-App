@@ -10,7 +10,6 @@ let currentPage = 1;
 const itemsPerPage = 6;
 let articles = [];
 
-// Fetch news
 fetch(url)
   .then((response) => {
     if (!response.ok) {
@@ -31,7 +30,6 @@ fetch(url)
     feed.innerHTML = `<p style="color:red;">Failed to load news.</p>`;
   });
 
-// Display paginated data
 function showData() {
   feed.innerHTML = "";
 
@@ -57,13 +55,11 @@ function showData() {
       </div>
     `;
   });
-
-  // Button state
+  
   prevBtn.disabled = currentPage === 1;
   nextBtn.disabled = currentPage * itemsPerPage >= articles.length;
 }
 
-// Pagination controls
 nextBtn.addEventListener("click", () => {
   if (currentPage * itemsPerPage < articles.length) {
     currentPage++;
