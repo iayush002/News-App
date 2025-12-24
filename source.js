@@ -8,7 +8,7 @@ let currentPage = 1;
 const itemsPerPage = 6;
 let articles = [];
 
-const url = "https://api.spaceflightnewsapi.net/v4/articles/";
+const url = "https://newsapi.org/v2/everything?q=apple&from=2025-12-09&to=2025-12-09&sortBy=popularity&apiKey=dc397683b8884a17958b72cdf012d1f5";
 
 fetch(url)
   .then((response) => response.json())
